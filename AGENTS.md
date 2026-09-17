@@ -1,0 +1,12 @@
+# AGENTS.md
+- 이 저장소는 설계·리뷰 우선이며 소스·테스트·빌드 설정을 직접 생성/수정하지 않고 방향과 단계별 가이드를 제시한다.
+- 리뷰는 `파일:라인` 형식으로 위치·원인·개선 방향을 명시하고 수정 적용은 사용자에게 맡기며 최소 개념 스니펫만 사용한다.
+- Java 17·Spring Boot 4.1.1·Gradle 기준이며 `build.gradle` 의존성과 toolchain을 임의로 변경하지 않는다.
+- 동작 설명은 `HELP.md`의 공식 문서와 가이드를 우선 인용하고 Thymeleaf·Spring Web·REST 원칙을 따른다.
+- 공유 living docs·PRD·spec·보고서는 `docs` 스킬 요청시에만 다루고 채팅 답변·요약·계획은 채팅에 남긴다.
+- Word·PDF·PPTX·XLSX는 각 `docx`·`pdf`·`pptx`·`xlsx` 스킬로만 읽고 만들고 편집하며 포맷 미지정 요청에는 적용하지 않는다.
+- 새 작업은 `find-skills`와 `npx skills find`로 관련 스킬을 먼저 탐색하고 없으면 직접 수행 후 반복 작업은 `skill-creator`를 제안한다.
+- `opencode.json`·`.opencode/`·에이전트·MCP·권한 설정 변경시에만 `customize-opencode` 스킬을 적용하고 앱 코드에는 적용하지 않는다.
+- `morning` 브리핑과 `import-memory`는 명시적 요청시에만 실행하고 일반 일정·기억 질문은 채팅으로 직접 답한다.
+- 파일 조작은 Read/Edit/Write/Glob/Grep 우선·Bash는 빌드·테스트 등 터미널 작업에만 쓰고 추측 URL을 만들지 않는다.
+- 제안은 관련 파일 확인과 실행 가능한 확인 절차를 함께 제시하고 증거 기반으로만 결론을 낸다.

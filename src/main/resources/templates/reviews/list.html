@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout :: head(pageTitle=${pageTitle}, pageDescription=${pageDescription})}">
+</head>
+<body>
+<div th:replace="~{layout :: header}"></div>
+<main class="page">
+  <h1 th:text="#{review.list.title}"></h1>
+
+  <section>
+    <h2 th:text="#{review.search.heading}"></h2>
+    <form th:action="@{/reviews}" method="get" class="search-form">
+      <div class="field">
+        <label for="keyword" th:text="#{review.search.keyword}"></label>
+        <input type="search" id="keyword" name="keyword" th:value="${search.keyword}"
+               th:placeholder="#{review.search.keyword.placeholder}" maxlength="100">
+      </div>
+      <div class="field">
+        <label for="region" th:text="#{review.search.region}"></label>
+        <input type="search" id="region" name="region" th:value="${search.region}"
+               th:placeholder="#{review.search.region.placeholder}" maxlength="30">
+      </div>
+      <div class="field">
+        <label for="category" th:text="#{review.search.category}"></label>
+        <select id="category" name="category">
+          <option value="" th:text="#{review.search.category.all}"></option>
+          <option th:each="c : ${categories}" th:value="${c}" th:text="${c}"
+                  th:selected="${c == search.category}"></option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="minRating" th:text="#{review.search.minRating}"></label>
+        <select id="minRating" name="minRating">
+          <option value="" th:text="#{review.search.minRating.all}"></option>
+          <option th:each="n : ${#numbers.sequence(1, 5)}" th:value="${n}" th:text="${n}"
+                  th:selected="${n == search.minRating}"></option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="sort" th:text="#{review.search.sort}"></label>
+        <select id="sort" name="sort">
+          <option value="latest" th:text="#{review.search.sort.latest}"
+                  th:selected="${search.sort == 'latest'}"></option>
+          <option value="rating" th:text="#{review.search.sort.rating}"
+                  th:selected="${search.sort == 'rating'}"></option>
+        </select>
+      </div>
+      <button type="submit" th:text="#{review.search.submit}" class="button-primary"></button>
+    </form>
+  </section>
+
+  <section>
+    <div th:if="${results.empty}" class="empty-state">
+      <p th:text="${search.filtered} ? #{review.search.empty} : #{review.list.empty}"></p>
+      <a th:href="@{/reviews}" th:text="#{review.search.reset}" class="button-secondary"></a>
+    </div>
+    <div th:unless="${results.empty}" class="review-list">
+      <th:block th:each="item : ${results.content}">
+        <article th:replace="~{layout :: reviewCard(item=${item})}"></article>
+      </th:block>
+    </div>
+    <div th:replace="~{layout :: pagination(window=${pageWindow}, base=${'/reviews?' + (#strings.isEmpty(baseQuery) ? '' : baseQuery + '&') + 'page='})}"></div>
+  </section>
+</main>
+<div th:replace="~{layout :: footer}"></div>
+</body>
+</html>

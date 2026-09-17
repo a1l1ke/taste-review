@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout :: head(pageTitle=${pageTitle}, pageDescription=${pageDescription})}">
+</head>
+<body>
+<div th:replace="~{layout :: header}"></div>
+<main class="page">
+  <h1 th:text="${store.name}"></h1>
+  <p>
+    <span th:text="#{review.form.storeAddress}"></span>
+    <span th:text="${store.address}"></span>
+  </p>
+  <p>
+    <span th:text="#{review.form.storeRegion}"></span>
+    <span th:text="${store.region}"></span>
+  </p>
+  <p>
+    <span th:text="#{review.form.storeCategory}"></span>
+    <span class="badge" th:text="${store.category}"></span>
+  </p>
+  <p th:if="${store.hasReviews()}" class="rating">
+    <span th:text="#{store.detail.averageRating(${store.averageRating})}"></span>
+    <span aria-hidden="true">★</span>
+    <span th:text="${store.averageRating}" th:attr="aria-label=#{review.rating.label(${store.averageRating})}"></span>
+    <span th:text="#{store.detail.reviewCount(${store.reviewCount})}"></span>
+  </p>
+  <p th:unless="${store.hasReviews()}" th:text="#{store.detail.noReviews}"></p>
+
+  <section th:if="${store.hasReviews()}">
+    <h2 th:text="#{store.detail.reviews}"></h2>
+    <div class="review-list">
+      <th:block th:each="item : ${store.reviews}">
+        <article th:replace="~{layout :: reviewCard(item=${item})}"></article>
+      </th:block>
+    </div>
+    <div th:replace="~{layout :: pagination(window=${pageWindow}, base=${'/stores/' + store.id + '?page='})}"></div>
+  </section>
+</main>
+<div th:replace="~{layout :: footer}"></div>
+</body>
+</html>

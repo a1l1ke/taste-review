@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout :: head(pageTitle=#{error.404.title}, pageDescription=#{error.404.message})}">
+</head>
+<body>
+<div th:replace="~{layout :: header}"></div>
+<main class="page error-page">
+  <h1 th:text="#{error.404.code}"></h1>
+  <p th:text="#{error.404.message}"></p>
+  <a th:href="@{/}" th:text="#{error.home}" class="button-primary"></a>
+</main>
+<div th:replace="~{layout :: footer}"></div>
+</body>
+</html>

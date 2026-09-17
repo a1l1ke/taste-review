@@ -35,3 +35,6 @@ out/
 
 ### VS Code ###
 .vscode/
+
+# local environment files (secrets, see ADR-007)
+.env*

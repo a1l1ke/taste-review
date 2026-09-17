@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="head(pageTitle, pageDescription)">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title th:text="${pageTitle}"></title>
+  <meta name="description" content="" th:attr="content=${pageDescription}">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+  <link rel="stylesheet" th:href="@{/css/app.css}" href="/css/app.css">
+</head>
+<body>
+<header th:fragment="header" class="site-header">
+  <a th:href="@{/}" th:text="${siteName}" class="site-header-home"></a>
+  <a th:href="@{/reviews/new}" th:text="#{layout.newReview}" class="button-primary"></a>
+  <form th:action="@{/reviews}" method="get" class="site-header-search" role="search">
+    <label for="header-keyword" th:text="#{layout.search.keyword}"></label>
+    <input type="search" id="header-keyword" name="keyword"
+           th:placeholder="#{layout.search.placeholder}" maxlength="100">
+    <button type="submit" th:text="#{layout.search.button}" class="button-secondary"></button>
+  </form>
+  <div th:if="${flashMessage}" role="status" class="flash-success" th:text="${flashMessage}"></div>
+  <div th:if="${flashError}" role="alert" class="flash-error" th:text="${flashError}"></div>
+</header>
+
+<footer th:fragment="footer" class="site-footer">
+  <p th:text="${siteDescription}"></p>
+</footer>
+
+<article th:fragment="reviewCard(item)" class="review-card">
+  <h2 class="review-card-title">
+    <a th:href="@{/reviews/{id}(id=${item.id})}" th:text="${item.title}"></a>
+  </h2>
+  <p>
+    <span th:text="${item.storeName}"></span>
+    <span class="badge" th:text="${item.storeCategory}"></span>
+  </p>
+  <p class="rating">
+    <span aria-hidden="true">★</span>
+    <span th:text="${item.rating}" th:attr="aria-label=#{review.rating.label(${item.rating})}"></span>
+  </p>
+  <p class="review-meta">
+    <span th:text="${item.nickname}"></span>
+    <span th:text="${item.createdAt}"></span>
+    <span th:text="#{review.list.commentCount(${item.commentCount})}"></span>
+  </p>
+</article>
+
+<nav th:fragment="pagination(window, base)" class="pagination" th:if="${window.totalPages > 1}">
+  <a th:if="${window.hasPrevious()}" th:href="${base + window.previousPage}"
+     th:text="#{review.list.prev}" class="button-secondary"></a>
+  <a th:each="p : ${window.pageNumbers}" th:href="${base + p}" th:text="${p}"
+     th:classappend="${p == window.currentPage} ? 'pagination-current' : ''"
+     th:attr="aria-current=${p == window.currentPage} ? 'page' : null"
+     class="button-secondary"></a>
+  <a th:if="${window.hasNext()}" th:href="${base + window.nextPage}"
+     th:text="#{review.list.next}" class="button-secondary"></a>
+</nav>
+</body>
+</html>

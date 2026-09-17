@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout :: head(pageTitle=${pageTitle}, pageDescription=${pageDescription})}">
+</head>
+<body>
+<div th:replace="~{layout :: header}"></div>
+<main class="page">
+  <h1 th:text="${review.title}"></h1>
+  <p class="review-meta">
+    <span th:text="${review.nickname}"></span>
+    <span th:text="${review.createdAt}"></span>
+    <span th:if="${review.edited}">
+      <span th:text="#{review.detail.edited}"></span>
+      <span th:text="#{review.detail.updatedAt}"></span>
+      <span th:text="${review.updatedAt}"></span>
+    </span>
+  </p>
+  <p class="rating">
+    <span aria-hidden="true">★</span>
+    <span th:text="${review.rating}" th:attr="aria-label=#{review.rating.label(${review.rating})}"></span>
+  </p>
+
+  <section class="store-box">
+    <h2 th:text="#{review.detail.store}"></h2>
+    <p>
+      <span th:text="${review.storeName}"></span>
+      <span class="badge" th:text="${review.storeCategory}"></span>
+    </p>
+    <p th:text="${review.storeAddress}"></p>
+    <p th:text="${review.storeRegion}"></p>
+    <a th:href="@{/stores/{id}(id=${review.storeId})}" th:text="#{review.detail.store.link}"></a>
+  </section>
+
+  <p class="review-content" th:text="${review.content}"></p>
+
+  <div>
+    <a th:href="@{/reviews/{id}/edit(id=${review.id})}" th:text="#{review.detail.edit}" class="button-secondary"></a>
+    <section>
+      <h2 th:text="#{review.detail.delete.title}"></h2>
+      <form th:action="@{/reviews/{id}/delete(id=${review.id})}" th:object="${reviewDeleteForm}"
+            method="post" class="review-delete-form">
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+        <div class="field">
+          <label for="review-delete-password" th:text="#{review.detail.delete.password}"></label>
+          <input type="password" id="review-delete-password" th:field="*{password}" maxlength="20" autocomplete="current-password">
+        </div>
+        <button type="submit" th:text="#{review.detail.delete}" class="button-danger"></button>
+      </form>
+    </section>
+  </div>
+
+  <section id="comments" class="comments">
+    <h2 th:text="#{comment.title}"></h2>
+    <div th:each="comment : ${review.comments}" class="comment">
+      <p class="review-meta">
+        <span th:text="${comment.nickname}"></span>
+        <span th:text="${comment.createdAt}"></span>
+      </p>
+      <p th:text="${comment.content}"></p>
+      <form th:action="@{/comments/{id}/delete(id=${comment.id})}" th:object="${commentDeleteForm}"
+            method="post" class="comment-delete-form">
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+        <div class="field">
+          <label th:attr="for=${'comment-delete-password-' + comment.id}" th:text="#{review.detail.delete.password}"></label>
+          <input type="password" th:attr="id=${'comment-delete-password-' + comment.id}" name="password" maxlength="20" autocomplete="current-password">
+        </div>
+        <button type="submit" th:text="#{comment.delete}" class="button-danger"></button>
+      </form>
+    </div>
+
+    <h3 th:text="#{comment.form}"></h3>
+    <form th:action="@{/reviews/{id}/comments(id=${review.id})}" th:object="${commentForm}"
+          method="post" class="review-form">
+      <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+      <div th:if="${#fields.hasAnyErrors()}" role="alert" class="form-error-summary">
+        <p th:text="#{error.form.invalid}"></p>
+      </div>
+      <div class="field">
+        <label for="comment-nickname">
+          <span th:text="#{comment.nickname}"></span>
+          <span class="required-mark" th:text="#{review.form.required}"></span>
+        </label>
+        <input type="text" id="comment-nickname" th:field="*{nickname}" maxlength="20"
+               th:attr="aria-invalid=${#fields.hasErrors('nickname')} ? 'true' : null, aria-describedby=${#fields.hasErrors('nickname')} ? 'comment-nickname-error' : null">
+        <p id="comment-nickname-error" th:if="${#fields.hasErrors('nickname')}" class="field-error" th:errors="*{nickname}"></p>
+      </div>
+      <div class="field">
+        <label for="comment-password">
+          <span th:text="#{comment.password}"></span>
+          <span class="required-mark" th:text="#{review.form.required}"></span>
+        </label>
+        <input type="password" id="comment-password" th:field="*{password}" maxlength="20" autocomplete="new-password"
+               th:attr="aria-invalid=${#fields.hasErrors('password')} ? 'true' : null, aria-describedby=${#fields.hasErrors('password')} ? 'comment-password-error comment-password-help' : 'comment-password-help'">
+        <p id="comment-password-help" class="form-help" th:text="#{review.form.password.help}"></p>
+        <p id="comment-password-error" th:if="${#fields.hasErrors('password')}" class="field-error" th:errors="*{password}"></p>
+      </div>
+      <div class="field">
+        <label for="comment-content">
+          <span th:text="#{comment.content}"></span>
+          <span class="required-mark" th:text="#{review.form.required}"></span>
+        </label>
+        <textarea id="comment-content" th:field="*{content}" maxlength="500" rows="3"
+                  th:attr="aria-invalid=${#fields.hasErrors('content')} ? 'true' : null, aria-describedby=${#fields.hasErrors('content')} ? 'comment-content-error' : null"></textarea>
+        <p id="comment-content-error" th:if="${#fields.hasErrors('content')}" class="field-error" th:errors="*{content}"></p>
+      </div>
+      <button type="submit" th:text="#{comment.submit}" class="button-primary"></button>
+    </form>
+  </section>
+</main>
+<div th:replace="~{layout :: footer}"></div>
+</body>
+</html>

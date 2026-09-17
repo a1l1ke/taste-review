@@ -1,6 +1,6 @@
 ---
 name: prd
-description: 기능이나 제품의 PRD(Product Requirements Document)를 작성·수정한다. 사용자가 PRD, 요구사항 문서, 기능 명세, 기획서를 만들거나 고쳐 달라고 할 때, 또는 새 기능을 구현하기 전에 요구사항을 정리하려 할 때 사용한다. 모든 PRD는 docs/prd 경로에서 관리한다.
+description: 기능이나 제품의 PRD(Product Requirements Document)를 작성·수정한다. 사용자가 PRD, 제품 요구사항 문서, 기획서를 만들거나 고쳐 달라고 할 때, 또는 새 기능을 구현하기 전에 요구사항을 정리하려 할 때 사용한다. 상세한 소프트웨어 요구사항 명세(SRS)는 srs 스킬을 쓴다. 모든 PRD는 docs/prd 경로에서 관리한다.
 ---
 
 # PRD 작성

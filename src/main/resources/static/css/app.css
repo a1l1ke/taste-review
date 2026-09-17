@@ -35,19 +35,26 @@
   --leading-xl: 32px;
   --text-2xl: 32px;
   --leading-2xl: 40px;
+  --text-hero: 40px;
+  --leading-hero: 48px;
   --font-regular: 400;
   --font-semibold: 600;
   --font-bold: 700;
+  --font-extrabold: 800;
+  --tracking-tight: -0.02em;
   --space-1: 8px;
   --space-2: 16px;
   --space-3: 24px;
   --space-4: 32px;
   --space-5: 40px;
   --space-6: 48px;
+  --space-7: 56px;
   --radius-sm: 8px;
   --radius-md: 16px;
+  --radius-lg: 24px;
   --radius-full: 9999px;
-  --shadow-card: 0 1px 2px rgba(59, 42, 32, 0.08);
+  --shadow-card: 0 2px 8px rgba(59, 42, 32, 0.06);
+  --shadow-card-hover: 0 8px 20px rgba(59, 42, 32, 0.12);
   --border-width: 1px;
   --focus-ring: 2px solid var(--color-focus);
   --focus-ring-offset: 2px;
@@ -100,7 +107,8 @@ video {
   margin-bottom: var(--space-2);
   font-size: var(--text-xl);
   line-height: var(--leading-xl);
-  font-weight: var(--font-bold);
+  font-weight: var(--font-extrabold);
+  letter-spacing: var(--tracking-tight);
 }
 
 .page h2 {
@@ -123,6 +131,8 @@ video {
 
 .read {
   max-width: calc(var(--space-1) * 90);
+  margin-inline: auto;
+  width: 100%;
 }
 
 .site-main {
@@ -138,7 +148,8 @@ video {
   margin-bottom: var(--space-2);
   font-size: var(--text-xl);
   line-height: var(--leading-xl);
-  font-weight: var(--font-bold);
+  font-weight: var(--font-extrabold);
+  letter-spacing: var(--tracking-tight);
 }
 
 .section {
@@ -160,7 +171,8 @@ a:focus-visible,
 button:focus-visible,
 input:focus-visible,
 select:focus-visible,
-textarea:focus-visible {
+textarea:focus-visible,
+summary:focus-visible {
   outline: var(--focus-ring);
   outline-offset: var(--focus-ring-offset);
 }
@@ -180,8 +192,8 @@ textarea:focus-visible {
   flex-wrap: wrap;
   align-items: center;
   gap: var(--space-1);
-  background-color: var(--color-surface-muted);
-  border-bottom: var(--border-width) solid var(--color-border);
+  background-color: var(--color-bg);
+  margin-bottom: var(--space-3);
   min-height: calc(var(--space-1) * 8);
   padding-inline: var(--space-2);
   padding-block: var(--space-1);
@@ -237,8 +249,31 @@ textarea:focus-visible {
   justify-content: center;
   min-height: var(--space-6);
   min-width: var(--space-6);
-  padding-inline: var(--space-2);
+  padding-inline: var(--space-3);
   border: var(--border-width) solid transparent;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-family);
+  font-size: var(--text-md);
+  line-height: var(--leading-md);
+  font-weight: var(--font-semibold);
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.btn-primary,
+.button-primary,
+.btn-secondary,
+.button-secondary,
+.btn-danger,
+.button-danger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--space-6);
+  min-width: var(--space-6);
+  padding-inline: var(--space-3);
+  border-width: var(--border-width);
+  border-style: solid;
   border-radius: var(--radius-sm);
   font-family: var(--font-family);
   font-size: var(--text-md);
@@ -252,6 +287,7 @@ textarea:focus-visible {
 .button-primary {
   background-color: var(--color-primary);
   border-color: transparent;
+  border-radius: var(--radius-full);
   color: var(--color-on-primary);
 }
 
@@ -263,10 +299,22 @@ textarea:focus-visible {
   color: var(--color-on-primary);
 }
 
+.btn-primary:active,
+.button-primary:active {
+  transform: scale(0.98);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn-primary:active,
+  .button-primary:active {
+    transform: none;
+  }
+}
+
 .btn-secondary,
 .button-secondary {
-  background-color: var(--color-surface);
-  border-color: var(--color-border-strong);
+  background-color: var(--color-surface-muted);
+  border-color: transparent;
   color: var(--color-text);
 }
 
@@ -279,6 +327,11 @@ textarea:focus-visible {
 
 .btn-wide {
   width: 100%;
+}
+
+/* 핵심 CTA: 화면당 하나뿐인 주요 동작은 --space-7 높이로 키운다 */
+.btn-hero {
+  min-height: var(--space-7);
 }
 
 /* 폼 */
@@ -384,19 +437,34 @@ textarea[aria-invalid="true"] {
   border-radius: var(--radius-md);
 }
 
-/* 별점 입력: 라디오를 라벨과 함께 가로 배치 */
+/* 별점 입력: CSS 전용 위젯 (5→1 순서 + row-reverse로 1→5 표시) */
 .rating-group {
-  display: flex;
-  flex-wrap: wrap;
+  display: inline-flex;
+  flex-direction: row-reverse;
   gap: var(--space-1);
 }
 
-.rating-option {
+.rating-star {
   display: inline-flex;
   align-items: center;
-  gap: var(--space-1);
+  justify-content: center;
   min-height: var(--space-6);
   min-width: var(--space-6);
+  color: var(--color-border-strong);
+  font-size: var(--text-xl);
+  line-height: var(--leading-xl);
+  cursor: pointer;
+}
+
+.rating-group input:checked ~ label,
+.rating-group label:hover ~ label,
+.rating-group label:hover {
+  color: var(--color-star);
+}
+
+.rating-group input:focus-visible + label {
+  outline: var(--focus-ring);
+  outline-offset: var(--focus-ring-offset);
 }
 
 /* 삭제 폼: 작은 화면 두 줄, 넓은 화면 한 줄(댓글 삭제는 항상 두 줄) */
@@ -424,10 +492,23 @@ textarea[aria-invalid="true"] {
   gap: var(--space-1);
 }
 
+.search-details {
+  display: grid;
+  gap: var(--space-1);
+}
+
+.search-details summary {
+  display: flex;
+  align-items: center;
+  min-height: var(--space-6);
+  cursor: pointer;
+  font-weight: var(--font-semibold);
+}
+
 /* 리뷰 카드 목록: 항상 한 열 */
 .review-list {
   display: grid;
-  gap: var(--space-2);
+  gap: var(--space-3);
   list-style: none;
   margin: 0;
   padding: 0;
@@ -435,11 +516,30 @@ textarea[aria-invalid="true"] {
 
 .card,
 .review-card {
+  position: relative;
   background-color: var(--color-surface);
-  border: var(--border-width) solid var(--color-border);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-lg);
   box-shadow: var(--shadow-card);
-  padding: var(--space-2);
+  padding: var(--space-3);
+}
+
+.review-card:hover,
+.review-card:focus-within {
+  box-shadow: var(--shadow-card-hover);
+  transform: translateY(calc(var(--space-1) / -4));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .review-card:hover,
+  .review-card:focus-within {
+    transform: none;
+  }
+}
+
+.review-card-title a::after {
+  content: "";
+  position: absolute;
+  inset: 0;
 }
 
 .card-title,
@@ -464,8 +564,14 @@ textarea[aria-invalid="true"] {
 }
 
 .stars .star,
-.rating [aria-hidden="true"] {
+.rating [aria-hidden="true"],
+.rating .star-filled {
   color: var(--color-star);
+  font-style: normal;
+}
+
+.rating .star-empty {
+  color: var(--color-border-strong);
   font-style: normal;
 }
 
@@ -482,11 +588,68 @@ textarea[aria-invalid="true"] {
   line-height: var(--leading-xs);
 }
 
+.badge-category {
+  background-color: var(--color-surface-muted);
+  color: var(--color-primary-hover);
+  font-weight: var(--font-semibold);
+}
+
 /* 리뷰 상세 */
 .store-box {
   background-color: var(--color-surface-muted);
   border-radius: var(--radius-md);
   padding: var(--space-2);
+}
+
+.store-box dl {
+  display: grid;
+  gap: var(--space-1);
+  margin: 0;
+}
+
+.store-box dt {
+  color: var(--color-text-muted);
+  font-size: var(--text-sm);
+  line-height: var(--leading-sm);
+}
+
+.store-box dd {
+  margin: 0;
+  color: var(--color-text);
+  font-size: var(--text-md);
+  line-height: var(--leading-md);
+}
+
+.store-box .store-name {
+  font-size: var(--text-lg);
+  line-height: var(--leading-lg);
+  font-weight: var(--font-semibold);
+}
+
+/* 가게 상세 평균 별점 요약 상자 */
+.store-rating-summary {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-2);
+  background-color: var(--color-surface-muted);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4);
+  margin-bottom: var(--space-2);
+}
+
+.store-rating-number {
+  font-size: var(--text-hero);
+  line-height: var(--leading-hero);
+  font-weight: var(--font-extrabold);
+  letter-spacing: var(--tracking-tight);
+}
+
+.store-rating-count {
+  flex-basis: 100%;
+  color: var(--color-text-muted);
+  font-size: var(--text-sm);
+  line-height: var(--leading-sm);
 }
 
 .review-content {
@@ -506,14 +669,15 @@ textarea[aria-invalid="true"] {
   padding: var(--space-2);
 }
 
-.comment {
-  border-top: var(--border-width) solid var(--color-border);
-  padding-top: var(--space-2);
+.comment-list {
+  display: grid;
+  gap: var(--space-1);
 }
 
-.comment:first-child {
-  border-top: 0;
-  padding-top: 0;
+.comment {
+  background-color: var(--color-surface);
+  border-radius: var(--radius-sm);
+  padding: var(--space-2);
 }
 
 /* 안내 상자 */
@@ -591,15 +755,6 @@ textarea[aria-invalid="true"] {
   .container,
   .site-header-inner {
     padding-inline: var(--space-3);
-  }
-
-  .card,
-  .review-card {
-    padding: var(--space-3);
-  }
-
-  .review-list {
-    gap: var(--space-3);
   }
 
   .search-form {

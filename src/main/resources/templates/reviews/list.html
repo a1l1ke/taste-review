@@ -15,37 +15,40 @@
         <input type="search" id="keyword" name="keyword" th:value="${search.keyword}"
                th:placeholder="#{review.search.keyword.placeholder}" maxlength="100">
       </div>
-      <div class="field">
-        <label for="region" th:text="#{review.search.region}"></label>
-        <input type="search" id="region" name="region" th:value="${search.region}"
-               th:placeholder="#{review.search.region.placeholder}" maxlength="30">
-      </div>
-      <div class="field">
-        <label for="category" th:text="#{review.search.category}"></label>
-        <select id="category" name="category">
-          <option value="" th:text="#{review.search.category.all}"></option>
-          <option th:each="c : ${categories}" th:value="${c}" th:text="${c}"
-                  th:selected="${c == search.category}"></option>
-        </select>
-      </div>
-      <div class="field">
-        <label for="minRating" th:text="#{review.search.minRating}"></label>
-        <select id="minRating" name="minRating">
-          <option value="" th:text="#{review.search.minRating.all}"></option>
-          <option th:each="n : ${#numbers.sequence(1, 5)}" th:value="${n}" th:text="${n}"
-                  th:selected="${n == search.minRating}"></option>
-        </select>
-      </div>
-      <div class="field">
-        <label for="sort" th:text="#{review.search.sort}"></label>
-        <select id="sort" name="sort">
-          <option value="latest" th:text="#{review.search.sort.latest}"
-                  th:selected="${search.sort == 'latest'}"></option>
-          <option value="rating" th:text="#{review.search.sort.rating}"
-                  th:selected="${search.sort == 'rating'}"></option>
-        </select>
-      </div>
-      <button type="submit" th:text="#{review.search.submit}" class="button-primary"></button>
+      <details class="search-details" th:attr="open=${search.filtered} ? 'open' : null">
+        <summary th:text="#{review.search.details}"></summary>
+        <div class="field">
+          <label for="region" th:text="#{review.search.region}"></label>
+          <input type="search" id="region" name="region" th:value="${search.region}"
+                 th:placeholder="#{review.search.region.placeholder}" maxlength="30">
+        </div>
+        <div class="field">
+          <label for="category" th:text="#{review.search.category}"></label>
+          <select id="category" name="category">
+            <option value="" th:text="#{review.search.category.all}"></option>
+            <option th:each="c : ${categories}" th:value="${c}" th:text="${c}"
+                    th:selected="${c == search.category}"></option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="minRating" th:text="#{review.search.minRating}"></label>
+          <select id="minRating" name="minRating">
+            <option value="" th:text="#{review.search.minRating.all}"></option>
+            <option th:each="n : ${#numbers.sequence(1, 5)}" th:value="${n}" th:text="${n}"
+                    th:selected="${n == search.minRating}"></option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="sort" th:text="#{review.search.sort}"></label>
+          <select id="sort" name="sort">
+            <option value="latest" th:text="#{review.search.sort.latest}"
+                    th:selected="${search.sort == 'latest'}"></option>
+            <option value="rating" th:text="#{review.search.sort.rating}"
+                    th:selected="${search.sort == 'rating'}"></option>
+          </select>
+        </div>
+      </details>
+      <button type="submit" th:text="#{review.search.submit}" class="button-primary btn-hero btn-wide search-submit"></button>
     </form>
   </section>
 

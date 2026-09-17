@@ -5,10 +5,11 @@
 <body>
 <div th:replace="~{layout :: header}"></div>
 <main class="page">
+<div class="read">
   <h1 th:text="${review.title}"></h1>
   <p class="review-meta">
-    <span th:text="${review.nickname}"></span>
-    <span th:text="${review.createdAt}"></span>
+    <span th:text="${review.nickname}"></span><span aria-hidden="true"> · </span>
+    <span th:text="${review.createdAt}"></span><span th:if="${review.edited}" aria-hidden="true"> · </span>
     <span th:if="${review.edited}">
       <span th:text="#{review.detail.edited}"></span>
       <span th:text="#{review.detail.updatedAt}"></span>
@@ -16,19 +17,28 @@
     </span>
   </p>
   <p class="rating">
-    <span aria-hidden="true">★</span>
+    <span aria-hidden="true"><span th:each="n : ${#numbers.sequence(1, 5)}" th:text="${n <= review.rating} ? '★' : '☆'" th:class="${n <= review.rating} ? 'star-filled' : 'star-empty'"></span></span>
     <span th:text="${review.rating}" th:attr="aria-label=#{review.rating.label(${review.rating})}"></span>
   </p>
 
   <section class="store-box">
     <h2 th:text="#{review.detail.store}"></h2>
-    <p>
-      <span th:text="${review.storeName}"></span>
-      <span class="badge" th:text="${review.storeCategory}"></span>
-    </p>
-    <p th:text="${review.storeAddress}"></p>
-    <p th:text="${review.storeRegion}"></p>
-    <a th:href="@{/stores/{id}(id=${review.storeId})}" th:text="#{review.detail.store.link}"></a>
+    <dl>
+      <div>
+        <dt th:text="#{review.form.storeName}"></dt>
+        <dd><a th:href="@{/stores/{id}(id=${review.storeId})}" th:text="${review.storeName}" class="store-name"></a>
+          <span class="badge badge-category" th:text="${review.storeCategory}"></span></dd>
+      </div>
+      <div>
+        <dt th:text="#{review.form.storeAddress}"></dt>
+        <dd th:text="${review.storeAddress}"></dd>
+      </div>
+      <div>
+        <dt th:text="#{review.form.storeRegion}"></dt>
+        <dd th:text="${review.storeRegion}"></dd>
+      </div>
+    </dl>
+    <p><a th:href="@{/stores/{id}(id=${review.storeId})}" th:text="#{review.detail.store.link}"></a></p>
   </section>
 
   <p class="review-content" th:text="${review.content}"></p>
@@ -51,9 +61,10 @@
 
   <section id="comments" class="comments">
     <h2 th:text="#{comment.title}"></h2>
+    <div class="comment-list">
     <div th:each="comment : ${review.comments}" class="comment">
       <p class="review-meta">
-        <span th:text="${comment.nickname}"></span>
+        <span th:text="${comment.nickname}"></span><span aria-hidden="true"> · </span>
         <span th:text="${comment.createdAt}"></span>
       </p>
       <p th:text="${comment.content}"></p>
@@ -66,6 +77,7 @@
         </div>
         <button type="submit" th:text="#{comment.delete}" class="button-danger"></button>
       </form>
+    </div>
     </div>
 
     <h3 th:text="#{comment.form}"></h3>
@@ -106,6 +118,7 @@
       <button type="submit" th:text="#{comment.submit}" class="button-primary"></button>
     </form>
   </section>
+</div>
 </main>
 <div th:replace="~{layout :: footer}"></div>
 </body>

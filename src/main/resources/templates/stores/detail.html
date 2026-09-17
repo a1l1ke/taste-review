@@ -6,24 +6,29 @@
 <div th:replace="~{layout :: header}"></div>
 <main class="page">
   <h1 th:text="${store.name}"></h1>
-  <p>
-    <span th:text="#{review.form.storeAddress}"></span>
-    <span th:text="${store.address}"></span>
-  </p>
-  <p>
-    <span th:text="#{review.form.storeRegion}"></span>
-    <span th:text="${store.region}"></span>
-  </p>
-  <p>
-    <span th:text="#{review.form.storeCategory}"></span>
-    <span class="badge" th:text="${store.category}"></span>
-  </p>
-  <p th:if="${store.hasReviews()}" class="rating">
-    <span th:text="#{store.detail.averageRating(${store.averageRating})}"></span>
-    <span aria-hidden="true">★</span>
-    <span th:text="${store.averageRating}" th:attr="aria-label=#{review.rating.label(${store.averageRating})}"></span>
-    <span th:text="#{store.detail.reviewCount(${store.reviewCount})}"></span>
-  </p>
+  <section class="store-box">
+    <dl>
+      <div>
+        <dt th:text="#{review.form.storeName}"></dt>
+        <dd><span class="store-name" th:text="${store.name}"></span>
+          <span class="badge badge-category" th:text="${store.category}"></span></dd>
+      </div>
+      <div>
+        <dt th:text="#{review.form.storeAddress}"></dt>
+        <dd th:text="${store.address}"></dd>
+      </div>
+      <div>
+        <dt th:text="#{review.form.storeRegion}"></dt>
+        <dd th:text="${store.region}"></dd>
+      </div>
+    </dl>
+  </section>
+  <div th:if="${store.hasReviews()}" class="store-rating-summary">
+    <span class="store-rating-number" th:text="${store.averageRating}"></span>
+    <span class="rating"><span aria-hidden="true"><span th:each="n : ${#numbers.sequence(1, 5)}" th:text="${n <= T(java.lang.Double).parseDouble(store.averageRating)} ? '★' : '☆'" th:class="${n <= T(java.lang.Double).parseDouble(store.averageRating)} ? 'star-filled' : 'star-empty'"></span></span>
+      <span th:text="#{review.rating.label(${store.averageRating})}"></span></span>
+    <span class="store-rating-count" th:text="#{store.detail.reviewCount(${store.reviewCount})}"></span>
+  </div>
   <p th:unless="${store.hasReviews()}" th:text="#{store.detail.noReviews}"></p>
 
   <section th:if="${store.hasReviews()}">

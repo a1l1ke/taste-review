@@ -11,15 +11,9 @@
 <body>
 <header th:fragment="header" class="site-header">
   <a th:href="@{/}" th:text="${siteName}" class="site-header-home"></a>
-  <a th:href="@{/reviews/new}" th:text="#{layout.newReview}" class="button-primary"></a>
-  <form th:action="@{/reviews}" method="get" class="site-header-search" role="search">
-    <label for="header-keyword" th:text="#{layout.search.keyword}"></label>
-    <input type="search" id="header-keyword" name="keyword"
-           th:placeholder="#{layout.search.placeholder}" maxlength="100">
-    <button type="submit" th:text="#{layout.search.button}" class="button-secondary"></button>
-  </form>
-  <div th:if="${flashMessage}" role="status" class="flash-success" th:text="${flashMessage}"></div>
-  <div th:if="${flashError}" role="alert" class="flash-error" th:text="${flashError}"></div>
+  <a th:href="@{/reviews/new}" th:text="#{layout.newReview}" class="button-primary btn-hero"></a>
+  <div th:if="${flashMessage}" role="status" class="flash flash-success" th:text="${flashMessage}"></div>
+  <div th:if="${flashError}" role="alert" class="flash flash-error" th:text="${flashError}"></div>
 </header>
 
 <footer th:fragment="footer" class="site-footer">
@@ -32,15 +26,15 @@
   </h2>
   <p>
     <span th:text="${item.storeName}"></span>
-    <span class="badge" th:text="${item.storeCategory}"></span>
+    <span class="badge badge-category" th:text="${item.storeCategory}"></span>
   </p>
   <p class="rating">
-    <span aria-hidden="true">★</span>
+    <span aria-hidden="true"><span th:each="n : ${#numbers.sequence(1, 5)}" th:text="${n <= item.rating} ? '★' : '☆'" th:class="${n <= item.rating} ? 'star-filled' : 'star-empty'"></span></span>
     <span th:text="${item.rating}" th:attr="aria-label=#{review.rating.label(${item.rating})}"></span>
   </p>
   <p class="review-meta">
-    <span th:text="${item.nickname}"></span>
-    <span th:text="${item.createdAt}"></span>
+    <span th:text="${item.nickname}"></span><span aria-hidden="true"> · </span>
+    <span th:text="${item.createdAt}"></span><span aria-hidden="true"> · </span>
     <span th:text="#{review.list.commentCount(${item.commentCount})}"></span>
   </p>
 </article>

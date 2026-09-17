@@ -5,6 +5,7 @@
 <body>
 <div th:replace="~{layout :: header}"></div>
 <main class="page">
+<div class="read">
   <h1 th:text="#{review.edit.title}"></h1>
   <p class="review-meta">
     <span th:text="${review.title}"></span>
@@ -23,7 +24,8 @@
         <span class="required-mark" th:text="#{review.form.required}"></span>
       </label>
       <input type="password" id="password" th:field="*{password}" maxlength="20" autocomplete="current-password"
-             th:attr="aria-invalid=${#fields.hasErrors('password')} ? 'true' : null, aria-describedby=${#fields.hasErrors('password')} ? 'password-error' : null">
+             th:attr="aria-invalid=${#fields.hasErrors('password')} ? 'true' : null, aria-describedby=${#fields.hasErrors('password')} ? 'password-error password-help' : 'password-help'">
+      <p id="password-help" class="form-help" th:text="#{review.form.password.help}"></p>
       <p id="password-error" th:if="${#fields.hasErrors('password')}" class="field-error" th:errors="*{password}"></p>
     </div>
     <fieldset class="field">
@@ -31,12 +33,14 @@
         <span th:text="#{review.form.rating}"></span>
         <span class="required-mark" th:text="#{review.form.required}"></span>
       </legend>
-      <label th:each="n : ${#numbers.sequence(1, 5)}">
-        <input type="radio" th:field="*{rating}" th:value="${n}">
-        <span aria-hidden="true">★</span>
-        <span th:text="${n}"></span>
-      </label>
-      <p th:if="${#fields.hasErrors('rating')}" class="field-error" th:errors="*{rating}"></p>
+      <div class="rating-group">
+        <th:block th:each="n : ${#numbers.sequence(5, 1, -1)}">
+          <input type="radio" th:field="*{rating}" th:value="${n}" th:id="${'rating-' + n}" class="visually-hidden"
+                 th:attr="aria-invalid=${#fields.hasErrors('rating')} ? 'true' : null, aria-describedby=${#fields.hasErrors('rating')} ? 'rating-error' : null">
+          <label th:for="${'rating-' + n}" class="rating-star"><span aria-hidden="true">★</span><span class="visually-hidden" th:text="${n} + '점'"></span></label>
+        </th:block>
+      </div>
+      <p id="rating-error" th:if="${#fields.hasErrors('rating')}" class="field-error" th:errors="*{rating}"></p>
     </fieldset>
     <div class="field">
       <label for="title">
@@ -56,9 +60,10 @@
                 th:attr="aria-invalid=${#fields.hasErrors('content')} ? 'true' : null, aria-describedby=${#fields.hasErrors('content')} ? 'content-error' : null"></textarea>
       <p id="content-error" th:if="${#fields.hasErrors('content')}" class="field-error" th:errors="*{content}"></p>
     </div>
-    <button type="submit" th:text="#{review.edit.submit}" class="button-primary"></button>
+    <button type="submit" th:text="#{review.edit.submit}" class="button-primary btn-hero"></button>
     <a th:href="@{/reviews/{id}(id=${review.id})}" th:text="#{review.form.cancel}" class="button-secondary"></a>
   </form>
+</div>
 </main>
 <div th:replace="~{layout :: footer}"></div>
 </body>
